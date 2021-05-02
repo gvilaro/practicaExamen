@@ -5,7 +5,6 @@ import cat.tecnocampus.notes.application.portsOut.NoteDAO;
 import cat.tecnocampus.notes.domain.Note;
 import cat.tecnocampus.notes.webAdapter.UserDoesNotExistException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,11 +13,11 @@ import java.util.List;
 public class NoteUseCases implements cat.tecnocampus.notes.application.portsIn.NoteUseCases {
 
     private final NoteDAO noteDAO;
-    private CallUserExists callUserExists;
+    private CallUserExists userExistsAdapter;
 
-    public NoteUseCases(NoteDAO noteDAO, CallUserExists callUserExists) {
+    public NoteUseCases(NoteDAO noteDAO, CallUserExists userExistsAdapter) {
         this.noteDAO = noteDAO;
-        this.callUserExists = callUserExists;
+        this.userExistsAdapter = userExistsAdapter;
     }
 
     @Override
@@ -43,10 +42,15 @@ public class NoteUseCases implements cat.tecnocampus.notes.application.portsIn.N
 
         //TODO 4.2: si implemeteu el discovery service voledreu que el restTemplate estigui balancejat, és a dir, si hi ha més d'una instància
         // del microservei d'usuaris que les crides es vagin repartin entre ells
-        String userExists = callUserExists.sendNote(note);
+        String userExists = userExistsAdapter.sendNote(note);
 
         if (userExists.equals("true")) {
             note.setChecked(true);
+            note.setDateCreation(LocalDateTime.now());
+            note.setDateEdit(LocalDateTime.now());
+            return addNote(note);
+        }else if (userExists.equals("opened")) {
+            note.setChecked(false);
             note.setDateCreation(LocalDateTime.now());
             note.setDateEdit(LocalDateTime.now());
             return addNote(note);
