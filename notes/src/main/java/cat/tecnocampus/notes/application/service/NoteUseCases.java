@@ -1,5 +1,6 @@
 package cat.tecnocampus.notes.application.service;
 
+import cat.tecnocampus.notes.application.portsOut.CallUserExists;
 import cat.tecnocampus.notes.application.portsOut.NoteDAO;
 import cat.tecnocampus.notes.domain.Note;
 import cat.tecnocampus.notes.webAdapter.UserDoesNotExistException;
@@ -13,11 +14,11 @@ import java.util.List;
 public class NoteUseCases implements cat.tecnocampus.notes.application.portsIn.NoteUseCases {
 
     private final NoteDAO noteDAO;
-    private RestTemplate restTemplate;
+    private CallUserExists callUserExists;
 
-    public NoteUseCases(NoteDAO noteDAO, RestTemplate restTemplate) {
+    public NoteUseCases(NoteDAO noteDAO, CallUserExists callUserExists) {
         this.noteDAO = noteDAO;
-        this.restTemplate = restTemplate;
+        this.callUserExists = callUserExists;
     }
 
     @Override
@@ -42,7 +43,7 @@ public class NoteUseCases implements cat.tecnocampus.notes.application.portsIn.N
 
         //TODO 4.2: si implemeteu el discovery service voledreu que el restTemplate estigui balancejat, és a dir, si hi ha més d'una instància
         // del microservei d'usuaris que les crides es vagin repartin entre ells
-        String userExists = restTemplate.getForObject("http://localhost:8080/users/exists/" + note.getUserName(), String.class);
+        String userExists = callUserExists.sendNote(note);
 
         if (userExists.equals("true")) {
             note.setChecked(true);
