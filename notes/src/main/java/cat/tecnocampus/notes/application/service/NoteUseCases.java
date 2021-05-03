@@ -44,21 +44,22 @@ public class NoteUseCases implements cat.tecnocampus.notes.application.portsIn.N
         // del microservei d'usuaris que les crides es vagin repartin entre ells
         String userExists = userExistsAdapter.sendNote(note);
 
-        if (userExists.equals("true")) {
+        if (userExists.equals(false)) {
+            throw new UserDoesNotExistException();
+        }else if (userExists.equals("true")) {
             note.setChecked(true);
-            note.setDateCreation(LocalDateTime.now());
-            note.setDateEdit(LocalDateTime.now());
-            return addNote(note);
         }else if (userExists.equals("opened")) {
             note.setChecked(false);
-            note.setDateCreation(LocalDateTime.now());
-            note.setDateEdit(LocalDateTime.now());
-            return addNote(note);
         }
 
-        throw new UserDoesNotExistException();
+        return reallyCreateNote(note);
     }
 
+    private Note reallyCreateNote(Note note){
+        note.setDateCreation(LocalDateTime.now());
+        note.setDateEdit(LocalDateTime.now());
+        return addNote(note);
+    }
     @Override
     public Note deleteNote(Note note) {
         noteDAO.deleteNote(note);
