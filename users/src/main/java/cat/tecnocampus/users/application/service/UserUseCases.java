@@ -1,9 +1,8 @@
 package cat.tecnocampus.users.application.service;
 
 import cat.tecnocampus.users.application.portsOut.UserDAO;
+import cat.tecnocampus.users.application.portsOut.UserDeleteMessage;
 import cat.tecnocampus.users.domain.User;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,9 +11,11 @@ import java.util.List;
 public class UserUseCases implements cat.tecnocampus.users.application.portsIn.UserUseCases {
 
     private final UserDAO userDAO;
+    private UserDeleteMessage userDeleteMessage;
 
-    public UserUseCases(UserDAO UserDAO) {
+    public UserUseCases(UserDAO UserDAO, UserDeleteMessage userDeleteMessage) {
         this.userDAO = UserDAO;
+        this.userDeleteMessage = userDeleteMessage;
     }
 
     @Override
@@ -43,6 +44,7 @@ public class UserUseCases implements cat.tecnocampus.users.application.portsIn.U
             //TODO 3: envia un missatge per tal que el microservei de les notes esborri les notes d'aquest usuari
             // Pensa que també hauràs d'implementar la part de rebre el missatge (i esborrar les notes) al microservei de notes
             // Recorda de seguir l'arquitectura hexagonal amb els ports i els adaptadors
+            userDeleteMessage.
             return user;
         }
 
