@@ -44,7 +44,7 @@ public class NoteUseCases implements cat.tecnocampus.notes.application.portsIn.N
         // del microservei d'usuaris que les crides es vagin repartin entre ells
         String userExists = userExistsAdapter.sendNote(note);
 
-        if (userExists.equals(false)) {
+        if (userExists.equals("false")) {
             throw new UserDoesNotExistException();
         }else if (userExists.equals("true")) {
             note.setChecked(true);

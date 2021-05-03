@@ -21,7 +21,7 @@ public class userExistsAdapter implements CallUserExists {
     public String sendNote(Note note) {
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create("users");
         return circuitBreaker.run(
-                () -> restTemplate.getForObject("http://localhost:8080/users/exists/" + note.getUserName(), String.class),
+                () -> restTemplate.getForObject("http://localhost:8081/users/exists/" + note.getUserName(), String.class),
                 throwable -> {
                     System.out.println(throwable.getMessage());
                     return  "opened";});
