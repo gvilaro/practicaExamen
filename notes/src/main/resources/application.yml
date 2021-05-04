@@ -24,3 +24,25 @@ spring.cloud.stream.bindings.receiverDeletingChannel:
   destination: deletingChannel
   group: notes
 
+#discovery
+spring.application.name: notes
+
+app:
+  users-service:
+    host: users
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 5
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+
+ribbon.ServerListRefreshInterval: 5000
+
+ribbon.NFLoadBalancerPingInterval: 5
+
